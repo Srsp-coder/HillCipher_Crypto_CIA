@@ -274,8 +274,4 @@ This project combines Hill Cipher for encryption and djb2 hashing for data integ
 - Replace djb2 with SHA-3 / HMAC
 - Add tampering attack simulation
 
----
 
-## 📄 License
-
-This project is intended for educational purposes only.
