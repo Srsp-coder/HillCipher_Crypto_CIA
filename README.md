@@ -109,7 +109,9 @@ Key Matrix:
 | 2  5 |
 
 Output:
-[Insert screenshot of encryption, hash, and decryption output here]
+<p align="center">
+    <img width="478" height="364" alt="image" src="https://github.com/user-attachments/assets/66f86ac4-a0c5-4365-9bbd-c011f1ed36c2" />
+</p>
 
 ---
 
@@ -122,10 +124,12 @@ Key Matrix:
 | 2  5 |
 
 Output:
-[Insert screenshot of encryption, hash, and decryption output here]
+<p align="center">
+    <img width="475" height="366" alt="image" src="https://github.com/user-attachments/assets/294ed8d2-8786-47aa-8600-3cdcd12eb614" />
+</p>
 
 ---
-## 6. Test Script (Round Trip)
+## 6. Test Script
 
 The implemented system performs the following sequence:
 
