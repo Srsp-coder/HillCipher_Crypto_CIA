@@ -1,277 +1,155 @@
-# 🔐 Hill Cipher with djb2 Hashing  
-### A Secure Message Transmission System with Data Integrity Verification
+# Hill Cipher with djb2 Hash Function
+
+## 1. Overview
+
+This project implements a secure message processing system using:
+
+- Hill Cipher for encryption and decryption
+- djb2 hashing function for data integrity verification
+
+The system demonstrates how classical encryption techniques can be combined with hashing to ensure both confidentiality and integrity of transmitted data.
 
 ---
 
-## 📌 Overview
+## 2. Theory
 
-This project implements a secure communication system by combining:
+### 2.1 Hill Cipher
 
-- **Hill Cipher** for encryption and decryption (confidentiality)
-- **djb2 Hash Function** for data integrity verification
+The Hill Cipher is a polygraphic substitution cipher based on linear algebra. It encrypts blocks of letters using matrix multiplication.
 
-The system ensures that:
-- Messages are encrypted before transmission  
-- Any tampering during transmission is detected before decryption  
+Each letter is mapped to a number:
+A = 0, B = 1, ..., Z = 25
 
----
+For a 2×2 key matrix:
 
-## 🎯 Objectives
-
-- To implement Hill Cipher using matrix operations
-- To design a hashing mechanism for integrity verification
-- To integrate encryption and hashing into a single system
-- To demonstrate secure data transmission concepts
-
----
-
-## 🚀 Features
-
-- 🔒 Hill Cipher Encryption (2×2 matrix)
-- 🔓 Hill Cipher Decryption using matrix inverse
-- 🧮 Custom implementation of djb2 hashing
-- ✅ Integrity verification before decryption
-- ⚠️ Detection of tampered messages
-- 💡 Simple and modular Python implementation
-
----
-
-## 🧠 Concepts Used
-
-- Linear Algebra (Matrix multiplication & inverse)
-- Modular Arithmetic (mod 26)
-- Classical Cryptography (Hill Cipher)
-- Hashing and Data Integrity
-- Bitwise Operations
-
----
-
-## ⚙️ System Architecture
-
-### 🔁 Sender Side
-1. Input plaintext message  
-2. Convert to uppercase and preprocess  
-3. Encrypt using Hill Cipher → Ciphertext  
-4. Generate hash using djb2 → Hash value  
-5. Send: *(Ciphertext, Hash)*  
-
----
-
-### 📥 Receiver Side
-1. Receive ciphertext and hash  
-2. Compute hash of received ciphertext  
-3. Compare hashes:
-   - ✅ Match → Proceed  
-   - ❌ Mismatch → Reject (tampered data)  
-4. Decrypt ciphertext → Original message  
-
----
-
-## 🔐 Hill Cipher
-
-### 📌 Description
-Hill Cipher is a polygraphic substitution cipher that uses matrix multiplication to encrypt blocks of text.
-
----
-
-### 🔑 Key Matrix
-
-```
-| 3  3 |
-| 2  5 |
-```
-
-> The key matrix must be invertible modulo 26.
-
----
-
-### 🔁 Encryption Formula
-
-```
+Encryption:
 C = (K × P) mod 26
-```
 
-Where:
-- K → Key matrix  
-- P → Plaintext vector  
-- C → Ciphertext vector  
-
----
-
-### 🔓 Decryption Formula
-
-```
+Decryption:
 P = (K⁻¹ × C) mod 26
-```
 
 Where:
-- K⁻¹ → Inverse of key matrix modulo 26  
+- K is the key matrix
+- K⁻¹ is the inverse of K modulo 26
+- P is the plaintext vector
+- C is the ciphertext vector
+
+The key matrix must be invertible modulo 26.
 
 ---
 
-### ⚠️ Padding
-If plaintext length is odd, an extra character `'X'` is added.
+### 2.2 djb2 Hash Function
 
----
+The djb2 algorithm, developed by Daniel J. Bernstein, is a simple and efficient hashing function.
 
-## 🔐 djb2 Hashing Algorithm
+It computes the hash using:
 
-### 📌 Overview
-The djb2 algorithm is a simple and efficient hashing function developed by Daniel J. Bernstein. It is used in this project to verify data integrity.
+    hash = hash * 33 + ASCII(character)
 
----
+Efficient implementation:
 
-### ⚙️ Working Principle
+    hash = ((hash << 5) + hash) + ord(character)
 
-The hash is computed using:
-
-```
-hash = hash * 33 + ASCII(character)
-```
-
-Optimized using bitwise operations:
-
-```
-hash = ((hash << 5) + hash) + ord(character)
-```
-
----
-
-### 🔁 Algorithm Steps
-
-1. Initialize:
-```
-hash = 5381
-```
-
+Steps:
+1. Initialize hash = 5381
 2. For each character:
-```
-hash = ((hash << 5) + hash) + ord(character)
-```
+   hash = ((hash << 5) + hash) + ord(character)
+3. Apply modulo to control size
 
-3. Apply modulo:
-```
-hash = hash % (10^9 + 7)
-```
+Justification for choosing djb2:
+- Simple to implement from scratch (no libraries required)
+- Fast and efficient
+- Good distribution for small-scale applications
+- Suitable for demonstrating data integrity concepts
 
-4. Return final hash
-
----
-
-### 🧠 Characteristics
-
-- Deterministic  
-- Fast and efficient  
-- Good distribution  
-- Lightweight implementation  
 
 ---
 
-### ⚠️ Limitations
+## 3. System Workflow
 
-- Not cryptographically secure  
-- Vulnerable to collisions  
-- Suitable for educational purposes only  
+Sender:
+1. Input plaintext
+2. Encrypt using Hill Cipher
+3. Generate hash of ciphertext using djb2
+4. Send ciphertext and hash
 
----
-
-## 🔗 Integration of Encryption and Hashing
-
-### 🔁 Sender
-- Encrypt message → Ciphertext  
-- Hash ciphertext → Hash  
-- Send both  
-
-### 📥 Receiver
-- Recompute hash  
-- Compare with received hash  
-- If valid → Decrypt  
-- Else → Reject  
+Receiver:
+1. Receive ciphertext and hash
+2. Recompute hash
+3. Compare hashes
+4. If valid, decrypt ciphertext
+5. If not, reject data
 
 ---
 
-## 🧪 Example
+## 4. Instructions to Run the Code
+
+1. Ensure Python is installed (Python 3.x)
+
+2. Place the source code file (e.g., main.py) in a directory
+
+3. Run the program:
 
 ```
-Original Message: HELLO
-Encrypted Message: HIOZHN
-Hash Value: 296352541
-
---- Transmission ---
-
-Received Hash: 296352541
-Computed Hash: 296352541
-Integrity Verified!
-
-Decrypted Message: HELLOX
-```
-
-> Note: 'X' is added for padding.
-
----
-
-## 🛠️ Installation & Usage
-
-### 1. Clone Repository
-```bash
-git clone <your-repo-link>
-cd <project-folder>
-```
-
-### 2. Run Program
-```bash
 python main.py
 ```
 
----
-
-## 📁 Project Structure
-
-```
-project/
-│── main.py
-│── README.md
-```
+4. Modify the input message and key inside the code if required
 
 ---
 
-## ⚠️ Limitations
+## 5. Worked Examples
 
-- Works only with uppercase letters (A–Z)
-- Uses fixed 2×2 matrix
-- Does not handle special characters
-- djb2 is not secure for real-world cryptography
+### Example 1
 
----
+Input:
+Plaintext: HELLO  
+Key Matrix:
+| 3  3 |
+| 2  5 |
 
-## 🔐 Security Considerations
-
-- Hill Cipher ensures confidentiality  
-- djb2 ensures basic data integrity  
-- For real-world applications, use:
-  - SHA-256 / SHA-3  
-  - HMAC or Digital Signatures  
+Output:
+[Insert screenshot of encryption, hash, and decryption output here]
 
 ---
 
-## 📚 Viva Explanation (Short)
+### Example 2
 
-This project combines Hill Cipher for encryption and djb2 hashing for data integrity. The ciphertext is hashed before transmission, and the receiver verifies the hash before decrypting to ensure that the message has not been altered.
+Input:
+Plaintext: TESTING  
+Key Matrix:
+| 3  3 |
+| 2  5 |
+
+Output:
+[Insert screenshot of encryption, hash, and decryption output here]
+
+---
+## 6. Test Script (Round Trip)
+
+The implemented system performs the following sequence:
+
+1. Encrypt plaintext using Hill Cipher
+2. Generate hash of ciphertext
+3. Verify hash at receiver
+4. Decrypt ciphertext back to plaintext
+
+This demonstrates a complete encrypt → hash → verify → decrypt pipeline.
 
 ---
 
-## 👨‍💻 Author
+## 7. Constraints Followed
 
-**Sai Pranav S R**
+- Language used: Python
+- No external cryptography libraries used
+- All algorithms implemented from scratch
+- Hash function implemented manually (djb2)
+- Hash function is distinct and justified
 
 ---
 
-## ⭐ Future Enhancements
+## 8. Conclusion
 
-- Support for larger matrices (3×3, 4×4)
-- GUI-based interface
-- File encryption support
-- Replace djb2 with SHA-3 / HMAC
-- Add tampering attack simulation
+This project successfully demonstrates the integration of Hill Cipher encryption with hashing for data integrity. It provides a clear understanding of classical cryptography and basic hashing techniques in a unified system.
 
-
+---
